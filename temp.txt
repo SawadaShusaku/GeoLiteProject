@@ -1,0 +1,13 @@
+
+def get_external_ip():
+    try:
+        response = requests.get('https://api.ipify.org?format=json', timeout=5)
+        return response.json()['ip']
+    except:
+        return "取得できませんでした"
+
+st.header("外部 IP アドレス")
+if st.button("外部IPアドレスを取得"):
+    external_ip = get_external_ip()
+    st.write(f"あなたの外部IPアドレス: {external_ip}")
+    st.snow()
