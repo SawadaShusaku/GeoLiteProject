@@ -83,15 +83,5 @@ if st.button("IPアドレスを取得") or st.session_state.show_ip:
                 st.write("追加情報の取得に失敗しました")
 
 ################################################
-def is_running_on_streamlit_cloud():
-    # Streamlit Cloudに特有の環境変数をチェック
-    return os.environ.get('STREAMLIT_SERVER_ADDRESS') == '0.0.0.0'
 
-# 実際のユーザーIPアドレスの取得（Streamlit Cloudでのみ機能）
-if st.button("クラウド対応IPアドレスを取得"):
-    if is_running_on_streamlit_cloud():
-        st.write("Streamlit Cloudでの実際のユーザーIPアドレス:")
-        st.write(st.get_client())
-    else:
-        st.write(os.environ.get('STREAMLIT_SERVER_ADDRESS') )
-        st.write("ローカル環境では、実際のユーザーIPアドレスの取得はサポートされていません。")
+st.write(st.get_client())
