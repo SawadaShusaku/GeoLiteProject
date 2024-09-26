@@ -84,4 +84,25 @@ if st.button("IPアドレスを取得") or st.session_state.show_ip:
 
 ################################################
 
-st.write(st.get_client())
+def get_client_ip():
+    try:
+        response = requests.get('https://api.ipify.org?format=json', timeout=5)
+        if response.status_code == 200:
+            return response.json()['ip']
+    except requests.RequestException:
+        pass
+    return None
+
+# セッション状態にIPアドレスを保存
+if 'user_ip' not in st.session_state:
+    st.session_state.user_ip = get_client_ip()
+
+st.title('ユーザーIPアドレス表示')
+
+if st.button('IPアドレスを表示'):
+    if st.session_state.user_ip:
+        st.success(f"あなたのIPアドレス: {st.session_state.user_ip}")
+    else:
+        st.error("IPアドレスの取得に失敗しました。")
+
+st.write("注意: このIPアドレスは、あなたのネットワークの公開IPアドレスです。")
