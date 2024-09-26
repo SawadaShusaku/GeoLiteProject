@@ -90,13 +90,18 @@ def get_public_ip():
     ip_data = response.json()
     return ip_data['ip']
 
+def get_internal_ip():
+    response = requests.get('http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/ip', headers={'Metadata-Flavor': 'Google'})
+    return response.text
+
 # セッション状態にIPアドレスを保存
 if 'user_ip' not in st.session_state:
     st.session_state.user_ip = get_public_ip()
-
-st.title('3ユーザーIPアドレス表示')
-
+st.title('ユーザーIPアドレス表示')
 if st.button('IPアドレスを表示'):
     st.success(f"あなたのIPアドレス: {st.session_state.user_ip}")
+    st.success(f"あなたのインターナルIPアドレス: {get_internal_ip}")
 
-st.write("3注意: このIPアドレスは、あなたのネットワークの公開IPアドレスです。")
+st.write("４注意: このIPアドレスは、あなたのネットワークの公開IPアドレスです。")
+
+
