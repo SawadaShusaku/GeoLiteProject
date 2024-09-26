@@ -1,4 +1,6 @@
 import streamlit as st
+from streamlit import runtime
+from streamlit.runtime.scriptrunner import get_script_run_ctx
 import socket
 import requests
 import time
@@ -84,23 +86,28 @@ if st.button("IPアドレスを取得") or st.session_state.show_ip:
 
 ################################################
 
+def get_remote_ip() -> str:
+    """Get remote ip."""
+    try:
+        ctx = get_script_run_ctx()
+        if ctx is None:
+            return None
 
-def get_public_ip():
-    response = requests.get('https://api.ipify.org?format=json')
-    ip_data = response.json()
-    return ip_data['ip']
+        session_info = runtime.get_instance().get_client(ctx.session_id)
+        if session_info is None:
+            return None
+    except Exception as e:
+        return f"エラーが発生しました: {str(e)}"
 
-def get_internal_ip():
-    response = requests.get('http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/ip', headers={'Metadata-Flavor': 'Google'})
-    return response.text
+    return session_info.request.remote_ip
 
-# セッション状態にIPアドレスを保存
-if 'user_ip' not in st.session_state:
-    st.session_state.user_ip = get_public_ip()
-st.title('ユーザーIPアドレス表示')
+st.title("クライアントIPアドレス表示")
+
 if st.button('IPアドレスを表示'):
-    st.success(f"あなたのIPアドレス: {st.session_state.user_ip}")
+    ip_address = get_remote_ip()
+    if ip_address:
+        st.success(f"あなたのIPアドレス: {ip_address}")
+    else:
+        st.error("IPアドレスを取得できませんでした。")
 
-st.write("５注意: このIPアドレスは、あなたのネットワークの公開IPアドレスです。")
-st.write(get_internal_ip())
-
+st.write("注意: このIPアドレスは、Streamlitサーバーが認識しているクライアントのIPアドレスです。")
