@@ -106,7 +106,7 @@ def get_client_ip():
 if 'user_ip' not in st.session_state:
     st.session_state.user_ip = get_client_ip()
 
-st.title('ユーザーIPアドレス表示')
+st.title('2ユーザーIPアドレス表示')
 
 if st.button('IPアドレスを表示'):
     st.success(f"あなたのIPアドレス: {st.session_state.user_ip}")
