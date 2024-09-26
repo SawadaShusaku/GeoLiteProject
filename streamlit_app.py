@@ -85,29 +85,3 @@ if st.button("IPアドレスを取得") or st.session_state.show_ip:
                 st.write("追加情報の取得に失敗しました")
 
 ################################################
-
-def get_remote_ip() -> str:
-    """Get remote ip."""
-    try:
-        ctx = get_script_run_ctx()
-        if ctx is None:
-            return None
-
-        session_info = runtime.get_instance().get_client(ctx.session_id)
-        if session_info is None:
-            return None
-    except Exception as e:
-        return f"エラーが発生しました: {str(e)}"
-
-    return session_info.request.remote_ip
-
-st.title("クライアントIPアドレス表示")
-
-if st.button('IPアドレスを表示'):
-    ip_address = get_remote_ip()
-    if ip_address:
-        st.success(f"あなたのIPアドレス: {ip_address}")
-    else:
-        st.error("IPアドレスを取得できませんでした。")
-
-st.write("注意: このIPアドレスは、Streamlitサーバーが認識しているクライアントのIPアドレスです。")
