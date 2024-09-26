@@ -100,8 +100,7 @@ if 'user_ip' not in st.session_state:
 st.title('ユーザーIPアドレス表示')
 if st.button('IPアドレスを表示'):
     st.success(f"あなたのIPアドレス: {st.session_state.user_ip}")
-    st.success("Your internal IP address is:", get_internal_ip())
 
 st.write("５注意: このIPアドレスは、あなたのネットワークの公開IPアドレスです。")
-
+st.write(get_internal_ip())
 
