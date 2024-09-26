@@ -2,6 +2,7 @@ import streamlit as st
 import socket
 import requests
 import time
+import os
 
 st.title("Get My IP Adress Streamlit App")
 st.write("Welcome to Streamlit!")
@@ -83,9 +84,8 @@ if st.button("IPアドレスを取得") or st.session_state.show_ip:
 
 ################################################
 def is_running_on_streamlit_cloud():
-    # Streamlit Cloudで実行されているかどうかを確認
-    # この方法は環境変数やその他の特定の条件に基づいて調整する必要があるかもしれません
-    return st.get_option('server.address') == '0.0.0.0'
+    # Streamlit Cloudに特有の環境変数をチェック
+    return os.environ.get('STREAMLIT_SERVER_ADDRESS') == '0.0.0.0'
 
 # 実際のユーザーIPアドレスの取得（Streamlit Cloudでのみ機能）
 if st.button("クラウド対応IPアドレスを取得"):
@@ -93,4 +93,5 @@ if st.button("クラウド対応IPアドレスを取得"):
         st.write("Streamlit Cloudでの実際のユーザーIPアドレス:")
         st.write(st.get_client())
     else:
+        st.write(os.environ.get('STREAMLIT_SERVER_ADDRESS') )
         st.write("ローカル環境では、実際のユーザーIPアドレスの取得はサポートされていません。")
