@@ -85,30 +85,18 @@ if st.button("IPアドレスを取得") or st.session_state.show_ip:
 ################################################
 
 
-def get_client_ip():
-    # クエリパラメータからIPアドレスを取得
-    query_params = st.experimental_get_query_params()
-    
-    # X-Forwarded-For ヘッダーからIPアドレスを取得
-    forwarded_for = query_params.get('X-Forwarded-For', [None])[0]
-    if forwarded_for:
-        # カンマで区切られた場合、最初のIPを使用
-        return forwarded_for.split(',')[0].strip()
-    
-    # X-Real-IP ヘッダーからIPアドレスを取得
-    real_ip = query_params.get('X-Real-IP', [None])[0]
-    if real_ip:
-        return real_ip
-    
-    return "IPアドレスを取得できませんでした"
+def get_public_ip():
+    response = requests.get('https://api.ipify.org?format=json')
+    ip_data = response.json()
+    return ip_data['ip']
 
 # セッション状態にIPアドレスを保存
 if 'user_ip' not in st.session_state:
-    st.session_state.user_ip = get_client_ip()
+    st.session_state.user_ip = get_public_ip()
 
-st.title('2ユーザーIPアドレス表示')
+st.title('3ユーザーIPアドレス表示')
 
 if st.button('IPアドレスを表示'):
     st.success(f"あなたのIPアドレス: {st.session_state.user_ip}")
 
-st.write("2注意: このIPアドレスは、あなたのネットワークの公開IPアドレスです。")
+st.write("3注意: このIPアドレスは、あなたのネットワークの公開IPアドレスです。")
