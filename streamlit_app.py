@@ -111,4 +111,4 @@ st.title('ユーザーIPアドレス表示')
 if st.button('IPアドレスを表示'):
     st.success(f"あなたのIPアドレス: {st.session_state.user_ip}")
 
-st.write("注意: このIPアドレスは、あなたのネットワークの公開IPアドレスです。")
+st.write("2注意: このIPアドレスは、あなたのネットワークの公開IPアドレスです。")
